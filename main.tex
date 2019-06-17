@@ -59,7 +59,7 @@ M=
 \]
 
 \vspace{5mm}
-Gleichunhgen: \\
+Gleichungen: \\
 Zeile 1: a = 0.4b + 0.6c \\
 Zeile 2: b = 0.6a \\
 Zeile 3: c = 0.4a \\
@@ -382,6 +382,46 @@ plot(o, k)
 \caption{Graph von tennis2\_alle.m}
 \label{fig:universe}
 \end{figure}
+
+\subsection{Berechnung von Hand}
+
+\subsubsection{}
+Chance auf Einstand:
+
+1 - (Chance auf Sieg + Chance auf Niederlage)
+
+$= 1 - (p^2 + (1-p)^2)$
+
+$= 1 - (p^2 + 1 - 2p + p^2)$
+
+$= 1 - 2p^2 - 1 + 2p$
+
+$= 2p - 2p^2$
+
+\subsubsection{}
+Chance auf Sieg nach drei weitere Einstände:
+
+$($Chance auf Einstand$)^3 * ($Chance auf Sieg$)$
+
+$= (2p - 2p^2)^3 * p^2$
+
+\subsubsection{}
+Berechnung der Siegeschance:
+
+$$\lim_{n\to\infty} \sum_{k=0}^{n} p^2 * (2p-2p^2)^k$$
+
+Geometrische Folge:
+
+\[=\frac{p^2}{1-(2p-2p^2)}\]
+
+\[=\frac{0.6^2}{1-(2*0.6-2*(0.6^2))}\]
+
+\[=\frac{0.36}{1-(1.2-0.72)}\]
+
+\[=0.6923076923\]
+
+\subsubsection{}
+%TO DO: ADD PICTURE & CODE
 
 \section{Populationsmodelle}
 \subsubsection{}

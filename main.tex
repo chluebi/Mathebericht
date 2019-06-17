@@ -1,0 +1,487 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
+
+
+
+
+\title{Mathebericht - Markov Ketten}
+\author{Luis und Bas}
+\date{2019}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{sectsty}
+\usepackage{comment}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{chemformula}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{chemformula}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Markov Ketten: Wahrscheinlichkeit beim Tennis}
+\subsection{Tennis Match 1}
+\subsubsection{} Als Zusatzblatt
+\subsubsection{} 
+\[
+M=
+  \begin{pmatrix}
+    0 & 0.4 & 0.6 & 0 & 0 \\
+    0.6 & 0 & 0 & 0 & 0 \\
+    0.4 & 0 & 0 & 0 & 0 \\
+    0 & 0.6 & 0 & 1 & 0 \\
+    0 & 0 & 0.4 & 0 & 1
+    
+  \end{pmatrix}
+\]
+\subsubsection{}
+\[
+M=
+  \begin{pmatrix}
+    -1 & 0.4 & 0.6 & 0 & 0 \\
+    0.6 & -1 & 0 & 0 & 0 \\
+    0.4 & 0 & -1 & 0 & 0 \\
+    0 & 0.6 & 0 & 0 & 0 \\
+    0 & 0 & 0.4 & 0 & 0
+    
+  \end{pmatrix}
+\]
+
+\vspace{5mm}
+Gleichunhgen: \\
+Zeile 1: a = 0.4b + 0.6c \\
+Zeile 2: b = 0.6a \\
+Zeile 3: c = 0.4a \\
+Zeile 4: b = 0 \\
+Zeile 5: c = 0 \\
+
+\vspace{5mm}
+a, b, c = 0
+Gleichungsystem doppelt unterbestimmt -> Fläche
+
+\[
+w1=
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    1 \\
+    0 
+    
+  \end{pmatrix}
+\]
+\[
+w2=
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    1 
+    
+  \end{pmatrix}
+\]
+
+\subsubsection{}
+\[
+v=
+  \begin{pmatrix}
+    1 \\
+    0 \\
+    0 \\
+    0 \\
+    0 
+    
+  \end{pmatrix}
+\]
+
+\[
+P^3 * v=
+  \begin{pmatrix}
+    0.00000 \\
+    0.28800 \\
+    0.19200 \\
+    0.36000 \\
+    0.16000 \\
+    
+  \end{pmatrix}
+\]
+Erklärung: \\
+Dies sind die Wahrscheinlichkeiten für die verschiedenen Zustände nach 3 Schritten.
+
+\subsubsection{}
+\[
+u=
+  \begin{pmatrix}
+    0 \\
+    1 \\
+    0 \\
+    0 \\
+    0 
+    
+  \end{pmatrix}
+\]
+
+\[
+P^3 * u=
+  \begin{pmatrix}
+    0.19200 \\
+    0.00000 \\
+    0.00000 \\
+    0.74400 \\
+    0.06400 \\
+    
+  \end{pmatrix}
+\]
+\[
+P^30 * u=
+  \begin{pmatrix}
+    0.00000 \\
+    0.00001 \\
+    0.00001 \\
+    0.87691 \\
+    0.12307 \\
+    
+  \end{pmatrix}
+\]
+\[
+P^100 * u=
+  \begin{pmatrix}
+    0.00000 \\
+    0.00000 \\
+    0.00000 \\
+    0.87692 \\
+    0.12308 \\
+    
+  \end{pmatrix}
+\]
+Erklärung: \\
+Bei $P^3$ ist noch ein gewisser Teil der Spiele im Einstand, während bei $P^{30}$ und $P^{100}$ (fast) alle Spiele schon beendet und meistens zugunsten von Spieler 1 ausgegangen sind.
+
+\subsubsection{}
+
+Lösungsweg: \\
+\vspace{5mm}
+\footnotesize{
+\begin{lstlisting}
+Funktion "f": 
+function y = f (x) 
+  V = [ 
+   0.00000   0.00000  -0.67479  -0.00000   0.42602; 
+   0.00000   0.00000   0.58438  -0.73019   0.36894; 
+   0.00000   0.00000   0.38959   0.48679   0.24596; 
+   1.00000   0.00000  -0.20713   0.43811  -0.72064; 
+   0.00000   1.00000  -0.09206  -0.19472  -0.32028; 
+  ] 
+  goal = [1; 0; 0; 0; 0] 
+  y = zeros(5,1) 
+  y(1) = x(1) * V(1,1) + x(2) * V(1,2) + x(3) * V(1,3) + x(4) * V(1,4) + x(5) * V(1,5) - 1 
+  y(2) = x(1) * V(2,1) + x(2) * V(2,2) + x(3) * V(2,3) + x(4) * V(2,4) + x(5) * V(2,5) 
+  y(3) = x(1) * V(3,1) + x(2) * V(3,2) + x(3) * V(3,3) + x(4) * V(3,4) + x(5) * V(3,5) 
+  y(4) = x(1) * V(4,1) + x(2) * V(4,2) + x(3) * V(4,3) + x(4) * V(4,4) + x(5) * V(4,5) 
+  y(5) = x(1) * V(5,1) + x(2) * V(5,2) + x(3) * V(5,3) + x(4) * V(5,4) + x(5) * V(5,5) 
+endfunction
+\end{lstlisting}
+}
+\begin{lstlisting}
+Datei "tennis1": 
+P = [0, 0.4, 0.6, 0, 0; 
+    0.6, 0, 0, 0, 0; 
+    0.4, 0, 0, 0, 0; 
+    0, 0.6, 0, 1, 0; 
+    0, 0, 0.4, 0, 1] 
+[x, fval, info] = fsolve (@f, [1; 1; 1; 1; 1]) 
+\end{lstlisting}
+\vspace{5mm}
+\normalsize
+Output von "tennis1":
+\[
+x=
+  \begin{pmatrix}
+    0.6923066298 \\
+    0.3076859606 \\
+    -0.7409688692 \\
+    0.0000025369 \\
+    1.1736576142 \\
+    
+  \end{pmatrix}
+\]
+
+\subsubsection{}
+
+$\lim\limits_{n \rightarrow \infty}{M^n} = M^n * v =$ \[
+  \begin{pmatrix}
+    z1 \\
+    z2 \\
+    z3 \\
+    z4 \\
+    z5 \\
+  \end{pmatrix}
+\]
+\\
+z4 gesucht! \\ \\
+\vspace{5mm}
+$\lim\limits_{n \rightarrow \infty}{M^n * v} = M^n * x_1 * w_1 + M^n * x_2 * w_2 ... + M^n * x_5 * w_5 \\
+= \lambda_1 * x_1 * w_1 + \lambda_2 * x_2 * w_2 ... + \lambda_5* x_5 * w_5 \\$
+\vspace{5mm} \\
+Weil: $\lambda_1 = \lambda_2 = 0$ und  $\lambda_3 < 0$, $\lambda_4 < 0$, $\lambda_5 < 0$\\
+\vspace{5mm} \\
+$\lim\limits_{n \rightarrow \infty}{M^n * v} = x_1 * w_1  + x_2 * w_2 = endvektor$ \\
+ \\
+$endvektor_4 = 0.69231$
+
+
+\subsubsection{}
+$P^{10000} * v$ = \[
+  \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0.69231 \\
+    0.30769 \\
+    
+  \end{pmatrix}
+\]
+
+Chance $= 69.231 \%$
+
+
+\subsection{Tennis Match 2}
+\subsubsection{}
+\begin{lstlisting}
+function P = prob_win (p)
+  P = [0, 1-p, p, 0, 0;
+      p, 0, 0, 0, 0;
+      1-p, 0, 0, 0, 0;
+      0, p, 0, 1, 0;
+      0, 0, 1-p, 0, 1]
+endfunction
+\end{lstlisting}
+
+\subsubsection{}
+\begin{lstlisting}
+function [P, lincomb] = prob_win (p, v)
+  P = [0, 1-p, p, 0, 0;
+      p, 0, 0, 0, 0;
+      1-p, 0, 0, 0, 0;
+      0, p, 0, 1, 0;
+      0, 0, 1-p, 0, 1];
+  
+  [w, LAMBDA] = eig(P);
+  
+  lincomb = w \ v;
+endfunction
+\end{lstlisting}
+
+\subsubsection{}
+\begin{lstlisting}
+function [P, lincomb, win_chance] = prob_win (p, v)
+  P = [0, 1-p, p, 0, 0;
+      p, 0, 0, 0, 0;
+      1-p, 0, 0, 0, 0;
+      0, p, 0, 1, 0;
+      0, 0, 1-p, 0, 1];
+  
+  [w, LAMBDA] = eig(P);
+  
+  lincomb = w \ v;
+  
+  win_chance = lincomb(1);
+endfunction
+\end{lstlisting}
+
+\subsubsection{}
+Kleines Umschreiben von "prob\_win.m": \\
+\begin{lstlisting}
+function [win_chance, lincomb, P] = prob_win (p, v)
+  P = [0, 1-p, p, 0, 0;
+      p, 0, 0, 0, 0;
+      1-p, 0, 0, 0, 0;
+      0, p, 0, 1, 0;
+      0, 0, 1-p, 0, 1];
+  
+  [w, LAMBDA] = eig(P);
+  
+  lincomb = w \ v;
+  
+  win_chance = lincomb(1);
+endfunction
+\end{lstlisting}
+
+tennis2.m: \\
+\begin{lstlisting}
+v = eye(5,1);
+k = [];
+o = [];
+for i=1:100
+	win_chance = prob_win((i-1)/100, v);
+	k(i) = win_chance;
+  o(i) = (i-1)/100;
+endfor
+plot(o, k)
+\end{lstlisting}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{graph.png}
+\caption{Graph von tennis2.m}
+\label{fig:universe}
+\end{figure}
+
+\subsubsection{}
+tennis2\_alle.m: \\
+\begin{lstlisting}
+hold on;
+
+v = eye(5,1);
+k = [];
+o = [];
+for i=1:100
+	win_chance = prob_win((i-1)/100, v);
+	k(i) = win_chance;
+  o(i) = (i-1)/100;
+endfor
+plot(o, k)
+
+v = [0;1;0;0;0];
+k = [];
+o = [];
+for i=1:100
+	win_chance = prob_win((i-1)/100, v);
+	k(i) = win_chance;
+  o(i) = (i-1)/100;
+endfor
+plot(o, k)
+
+v = [0;0;1;0;0];
+k = [];
+o = [];
+for i=1:100
+	win_chance = prob_win((i-1)/100, v);
+	k(i) = win_chance;
+  o(i) = (i-1)/100;
+endfor
+plot(o, k)
+
+\end{lstlisting}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{graph2.png}
+\caption{Graph von tennis2\_alle.m}
+\label{fig:universe}
+\end{figure}
+
+\section{Populationsmodelle}
+\subsubsection{}
+Auf Zusatzblatt
+\subsubsection{}
+Bleibt konstant \\
+Erklärung: Es kommen immer 6 dazu, danach durch 2 und durch 3 -> wieder bei 1
+\subsubsection{}
+eig(A1) = 2, -1, -1 -> wird immer grösser \\
+eig(A2) = 0.75, 0.375, 0.375 -> wird immer kleiner \\
+eig(A3) = 1, -0.5, -0.5 -> bleibt konstant \\
+eig(A4) = 1, -1 -> bleibt gleich \\
+\subsubsection{}
+plot\_pop\_sum.m:
+\begin{lstlisting}
+function endmatrix = plot_pop_sum (M)
+  endmatrix = zeros(1,11);
+  for i=0:10
+    v = ones(size(M)(1),1) * 10;
+    endmatrix(1,i+1) = sum(M^i * v);
+  endfor
+  endmatrix
+  plot(0:10,endmatrix)
+endfunction
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{plotA1.png}
+\caption{plot\_pop\_sum(A1)}
+\label{fig:universe}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotA2.png}
+\caption{plot\_pop\_sum(A2)}
+\label{fig:universe}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotA3.png}
+\caption{plot\_pop\_sum(A3)}
+\label{fig:universe}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotA4.png}
+\caption{plot\_pop\_sum(A4)}
+\label{fig:universe}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotA5.png}
+\caption{plot\_pop\_sum(A5)}
+\label{fig:universe}
+\end{figure}
+
+\subsubsection{}
+plot\_pop\_rel.m:
+\begin{lstlisting}
+function endmatrix = plot_pop_rel (M)
+  endmatrix = zeros(size(M)(1),11);
+  for i=0:10
+    v = ones(size(M)(1),1) * 10;
+    res = M^i * v;
+    endmatrix(:,i+1) = res / sum(res);
+  endfor
+  endmatrix
+  plot(0:10,endmatrix(1,:), 0:10, endmatrix(2,:), 0:10, endmatrix(3,:))
+endfunction
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotrelA1.png}
+\caption{plot\_pop\_rel(A1)}
+\label{fig:universe}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotrelA2.png}
+\caption{plot\_pop\_rel(A2)}
+\label{fig:universe}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{plotrelA3.png}
+\caption{plot\_pop\_rel(A3)}
+\label{fig:universe}
+\end{figure}
+
+\subsection{}
+
+
+
+
+\end{document}

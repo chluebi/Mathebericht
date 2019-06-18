@@ -145,7 +145,7 @@ P^3 * u=
   \end{pmatrix}
 \]
 \[
-P^30 * u=
+P^{30} * u=
   \begin{pmatrix}
     0.00000 \\
     0.00001 \\
@@ -156,7 +156,7 @@ P^30 * u=
   \end{pmatrix}
 \]
 \[
-P^100 * u=
+P^{100} * u=
   \begin{pmatrix}
     0.00000 \\
     0.00000 \\
@@ -383,7 +383,7 @@ plot(o, k)
 \label{fig:universe}
 \end{figure}
 
-\subsection{Berechnung von Hand}
+\subsection{Tennis Match 3}
 
 \subsubsection{}
 Chance auf Einstand:
@@ -430,10 +430,10 @@ Auf Zusatzblatt
 Bleibt konstant \\
 Erklärung: Es kommen immer 6 dazu, danach durch 2 und durch 3 -> wieder bei 1
 \subsubsection{}
-eig(A1) = 2, -1, -1 -> wird immer grösser \\
-eig(A2) = 0.75, 0.375, 0.375 -> wird immer kleiner \\
-eig(A3) = 1, -0.5, -0.5 -> bleibt konstant \\
-eig(A4) = 1, -1 -> bleibt gleich \\
+eig(A1) = 2, -1, -1 -> wird immer grösser, dominanter (=absolut gesehen grösster) > 1 \\
+eig(A2) = 0.75, 0.375, 0.375 -> wird immer kleiner, dominanter (=absolut gesehen grösster) < 1 \\
+eig(A3) = 1, -0.5, -0.5 -> bleibt konstant, dominanter (=absolut gesehen grösster) = 1 \\
+%eig(A4) = 1, -1 -> bleibt gleich \\
 \subsubsection{}
 plot\_pop\_sum.m:
 \begin{lstlisting}
@@ -519,7 +519,87 @@ endfunction
 \label{fig:universe}
 \end{figure}
 
-\subsection{}
+\subsubsection{}
+Am Beispiel A1: \\
+[V, LAM] = eig(A1)
+\[
+V =
+  \begin{pmatrix}
+    -0.96935 + 0.00000i && 0.88465 + 0.00000i && 0.88465 - 0.00000i \\ 
+    -0.24234 + 0.00000i && -0.44233 - 0.00000i && -0.44233 + 0.00000i \\
+    -0.04039 + 0.00000i &&  0.14744 + 0.00000i && 0.14744 - 0.00000i \\
+  \end{pmatrix}
+\]
+\[
+LAM =
+  \begin{pmatrix}
+    2.00000 + 0.00000i && 0 && 0 \\ 
+    0 && -1.00000 + 0.00000i && 0 \\
+    0 &&  0 &&  -1.00000 - 0.00000i \\
+  \end{pmatrix}
+\]
+
+Der Eigenwert \textbf{2} ist der dominate Eigenwert und wird langfristig gesehen der einzig wichtige Eigenvektor sein. Dessen dazugehöriger Eigenvektor zeigt deshalb auch die Aufteilung der Population langfristig gesehen.
+
+\subsubsection{}
+Die Eigenwerte von A4 = [1, -1] und A5 = [-0.5 + 0.86603i, -0.5 + 0.86603i, 1] haben alle den gleichen Betrag (=1). Es gibt keinen dominaten Eigenwert und man muss alle berücksichtigen.
+
+\subsubsection{}
+Sage man habe die Matrix M und deren Eigenwerte $\lambda_1, \lambda_2 ... \lambda_n$ \\
+Man berechne nun für jeden Eigenwert $\lambda_k$ den Betrag $|\lambda_k|$. Gibt es einen Eigenwert welcher grösser ist als alle anderen so ist nur dieser wichtig. Sind die Beträge mehrer Eigenwerte gleich gross, so sind alle dominant und müssen berücksichtigt werden.
+
+\vspace{5mm}
+
+$Wachstum = \left\{
+\begin{array}{ll}
+|\lambda_{dom}| > 1 & \, \textrm{Population wird immer grösser} \\
+|\lambda_{dom}| < 1 & \, \textrm{Population wird immer kleiner} \\
+|\lambda_{dom}| = 1 & \, \textrm{Population pendelt sich ein, bleibt gleich} \\
+\end{array}
+\right. $
+
+\subsubsection{}
+
+eig\_dom.m:
+\begin{lstlisting}
+function dom = eig_dom (M)
+  LAM = eig(M);
+  big = 0;
+  dom = [];
+  
+  for i=1:(size(LAM)(1))
+    cur = abs(LAM(i));
+    if big > cur
+      continue
+    elseif big == cur
+      dom(size(dom)(1)+1,1) = LAM(i);
+    else
+      dom = [LAM(i)];
+      big = cur;
+    endif
+  endfor
+endfunction
+\end{lstlisting}
+
+\subsection{Schutz für die Unechte Karettschildkröte 1}
+
+\subsection{Schutz für die Unechte Karettschildkröte 2}
+
+\subsubsection{}
+\[
+Jahr 1
+  \begin{pmatrix}
+    0 \\
+    67.47 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{pmatrix}
+\]
+
+
+
 
 
 

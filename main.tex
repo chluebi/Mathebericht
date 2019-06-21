@@ -648,10 +648,29 @@ Jahr 8
 \]
 
 \subsubsection{}
+\Large {
 $$\frac{u_2^7 * u_1}{u_1 + \sum_{k=1}^{6} u_2^k * u_1} 
 = \frac{u_2^7}{1 + \sum_{k=1}^{6} u_2^k}$$ \\
-$$= u_2^7 + u_2^6 + u_2^5 + u_2^4 + u_2^3 + u_2^2 + u_2^1$$ \\
-$$= \frac{1 - u_2^8}{1 - u_2}$$
+$$= \frac{u_2^7}{1 + \frac{1 - u_2^6}{1 - u_2}} =
+ \frac{u_2^7}{\frac{2-u_2^6-u_2}{1 - u_2}} =
+ \frac{u_2^7 - u_2^8}{2-u_2^6-u_2} = 0.040459$$
+}
+
+\subsubsection{}
+\Large {
+$$\frac{u_k^{d_k} - u_k^{(d_k+1)}}{2-u_k^{(d_k-1)}-u_k}$$
+}
+
+\subsubsection{}
+(u**d-u**(d+1))/(2-u**(d-1)-u)
+\[
+    \begin{pmatrix}
+     0.67470 \\
+     0.040459 \\
+     0.011196  \\
+     
+    \end{pmatrix}
+\]
 
 
 \subsection{}

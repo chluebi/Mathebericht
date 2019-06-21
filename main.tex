@@ -590,7 +590,25 @@ endfunction
 Jahr 1
   \begin{pmatrix}
     0 \\
-    67.47 \\
+    100 * u_1 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{pmatrix}
+Jahr 2
+  \begin{pmatrix}
+    0 \\
+    100 * u_1 * u_2 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{pmatrix}
+Jahr 8
+  \begin{pmatrix}
+    0 \\
+    100 * u_1 * u_2^7 \\
     0 \\
     0 \\
     0 \\
@@ -598,6 +616,45 @@ Jahr 1
   \end{pmatrix}
 \]
 
+\subsubsection{}
+\[
+Jahr 1
+  \begin{pmatrix}
+    100 \\
+    100 * u_1 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{pmatrix}
+Jahr 2
+  \begin{pmatrix}
+    100 \\
+    100 * u_1 + 100 * u_1 * u_2\\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{pmatrix}
+Jahr 8
+  \begin{pmatrix}
+    100 \\
+    100 * (u_1 + \sum_{k=1}^{6} u_2^k * u_1) \\
+    100 * u_2^7 * u_1 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{pmatrix}
+\]
+
+\subsubsection{}
+$$\frac{u_2^7 * u_1}{u_1 + \sum_{k=1}^{6} u_2^k * u_1} 
+= \frac{u_2^7}{1 + \sum_{k=1}^{6} u_2^k}$$ \\
+$$= u_2^7 + u_2^6 + u_2^5 + u_2^4 + u_2^3 + u_2^2 + u_2^1$$ \\
+$$= \frac{1 - u_2^8}{1 - u_2}$$
+
+
+\subsection{}
 
 
 

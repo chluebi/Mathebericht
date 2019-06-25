@@ -421,7 +421,32 @@ Geometrische Folge:
 \[=0.6923076923\]
 
 \subsubsection{}
-%TODO: ADD PICTURE & CODE
+
+\begin{lstlisting}
+function winChance = hand_win (p)
+  winChance = (p*p)/(2*(p**2) - 2*p + 1)
+endfunction
+
+
+p = 0:0.01:1;
+w = [];
+
+for i = 1:101
+   w(i) = hand_win(p(i));
+endfor
+
+plot(0:0.01:1, w)
+\end{lstlisting}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{winplot.png}
+\caption{Winchance}
+\label{fig:universe}
+\end{figure}
+
+
+
 
 \section{Populationsmodelle}
 \subsubsection{}
@@ -608,10 +633,14 @@ r = zeros(50,1);
 
 for i = 1:50
   t = L^i * v0;
-  for j = 1:7
-    r(i,j) = t(j);
-  endfor
+  r(:,i) = t;
 endfor
+
+hold on
+for i = 1:7
+  plot(1:50, r(i,:));
+endfor
+hold off
 \end{lstlisting}
 
 \begin{figure}[H]
@@ -620,6 +649,10 @@ endfor
 \label{fig:universe}
 \caption{Population Karettschildkröte}
 \end{figure}
+
+
+\subsubsection{}
+
 
 \subsection{Schutz für die Unechte Karettschildkröte 2}
 

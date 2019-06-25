@@ -652,7 +652,96 @@ hold off
 
 
 \subsubsection{}
+L = \begin{pmatrix}
+    0 & 0 & 0 & 0 & 127 & 4 & 80 \\
+    1 & 0.7371 & 0 & 0 & 0 & 0 & 0 \\
+    0 & 0.0486 & 0.6611 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 0.0147 & 0.6907 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0.0518 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0.8091 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 & 0.8091 & 0.8088 \\
+  \end{pmatrix}
 
+\subsubsection{}
+
+
+\begin{lstlisting}
+L = [0,0,0,0,127,4,80;
+1,0.7371,0,0,0,0,0;
+0,0.0486,0.6611,0,0,0,0;
+0,0,0.0147,0.6907,0,0,0;
+0,0,0,0.0518,0,0,0;
+0,0,0,0,0.8091,0,0;
+0,0,0,0,0,0.8091,0.8088];
+
+eig_dom(L)(1,1)
+
+\end{lstlisting}
+Output: 0.96497, das heisst
+auch wenn Eier und Jungtiere geschützt werden, stirbt die Population aus.
+
+\subsubsection{}
+\begin{lstlisting}
+function M = x_abhangig_schild (x)
+  M = [0,0,0,0,127,4,80;
+    0.6747,0.7371,0,0,0,0,0;
+    0,0.0486,0.6611,0,0,0,0;
+    0,0,0.0147,0.6907 * x,0,0,0;
+    0,0,0,0.0518 * x,0,0,0;
+    0,0,0,0,0.8091 * x,0,0;
+    0,0,0,0,0,0.8091 * x,0.8088 * x];
+endfunction
+
+
+fin = [];
+
+for i=1:100
+  cur = i/10;
+  M = x_abhangig_schild(cur);
+  fin(i) = eig_dom(M)(1,1);
+endfor
+
+plot(0.1:0.1:10,fin)
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{plot_abh_x.png}
+\label{fig:universe}
+\caption{Dominanter Eigenwert abhängig von x}
+\end{figure}
+
+\subsubsection{}
+Bei einem Wert von ungefähr 1.2 ist der dominante Eigenwert grösser als 1 und somit sinnvoll.
+
+\subsubsection{}
+\begin{lstlisting}
+min = 0.9;
+cur = 1;
+max = 1.2;
+format long;
+
+i = 0;
+while i < 10000
+  i += 1;
+  M = x_abhangig_schild(cur);
+  fin = eig_dom(M)(1,1);
+  diff = fin - 1;
+  if abs(diff) <= 10^-15
+    break
+  elseif diff > 0
+    max = cur;
+    cur = (max + min)/2;
+  else
+    min = cur;
+    cur = (max + min)/2;
+  endif
+endwhile
+
+cur
+\end{lstlisting}
+
+Output: 1.108695552170977
 
 \subsection{Schutz für die Unechte Karettschildkröte 2}
 
@@ -746,8 +835,38 @@ $$\frac{u_k^{d_k} - u_k^{(d_k+1)}}{1-u_k^{d_k}}$$
 \]
 
 \subsubsection{}
+\normalsize
+\begin{lstlisting}
+function retval = NextStep (u, d)
+  retval = u**d / ((1-u**d)/(1-u));
+endfunction
+
+
+function L = L_estimate (d, u, g)
+  L = zeros(length(d));
+  
+  #Alle die weiter gehen einsetzen
+  for i = 1:length(d)-1
+    L(i+1, i) = NextStep(u(i), d(i));
+  endfor
+  
+  #Alle die in derselben Gruppe bleiben einsetzen
+  for i = 1:length(d)-1
+    L(i,i) = (1 - (L(i+1,i) / u(i)) ) * u(i);
+  endfor
+  
+  #Neugeborene
+  for i = 1:length(d)
+    L(1,i) = g(i);
+  endfor
+  
+  #Letzte Gruppe (Ausnahmefall)
+  L(length(d),length(d)) = u(length(d));
+endfunction
+\end{lstlisting}
 
 \subsubsection{}
+\Large
 \[
     \begin{pmatrix}
      u_1 \\
@@ -761,6 +880,63 @@ $$\frac{u_k^{d_k} - u_k^{(d_k+1)}}{1-u_k^{d_k}}$$
 \]
 
 \normalsize
+
+\subsubsection{}
+\begin{lstlisting}
+x = [];
+elements = 100;
+
+p = 0;
+d = [1; 7; 8; 6; 1; 1; 30];
+u = [0.6747; 0.7857; 0.6758; 0.7425; 0.8091; 0.8091; 0.8091];
+g = [0; 0; 0; 0; 127; 4; 80];
+
+
+for i = 1:elements
+  p = linspace(0,0.5,elements)(i);
+  x(i) = eig_dom(L_estimate_TED(p, d, u, g))(1);
+endfor
+plot(linspace(0,0.5,elements), x);
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{dom_eig_abh_p_KARETT.png}
+\label{fig:universe}
+\caption{Dominanter Eigenwert abhängig von p}
+\end{figure}
+
+\subsubsection{}
+\begin{lstlisting}
+p = 0;
+d = [1; 7; 8; 6; 1; 1; 30];
+u = [0.6747; 0.7857; 0.6758; 0.7425; 0.8091; 0.8091; 0.8091];
+g = [0; 0; 0; 0; 127; 4; 80];
+
+p_min = 0;
+p_max = 1;
+format long;
+while true
+  p = (p_min + p_max)*0.5;
+  currentValue = eig_dom(L_estimate_TED(p, d, u, g))(1);
+  if abs(currentValue-1) <= 10^-12
+    if currentValue < 1
+      p_min = p;
+      p = (p_min + p_max)*0.5;
+    endif
+    break;
+  elseif currentValue > 1
+    p_max = p;
+  else
+    p_min = p;
+  endif
+endwhile
+p
+eig_dom(L_estimate_TED(p, d, u, g))(1)
+\end{lstlisting}
+Output:
+    p = 0.03955436545402335
+    ans = 1.000000000000753
 
 \subsection{SARS}
 

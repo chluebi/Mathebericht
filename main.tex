@@ -938,7 +938,10 @@ Output:
     p = 0.03955436545402335
     ans = 1.000000000000753
 
-\subsection{SARS}
+
+\vspace{1cm}
+\section{SARS}
+\subsection{}
 
 \subsubsection{}
 Die Konstanten benennen wie viele Personen vom einem Infektionszustand zu einem anderen gelangen.
@@ -968,17 +971,123 @@ Keine Person wird jemals zu S zurückgehen und somit wird S(t) auf lange Sicht g
      \lambda && 0 && 1 - \sigma && 0 \\
      0 &&  \theta && \sigma && 1 - \delta - \gamma \\
     \end{pmatrix}
+    * v
 \]
 
 \subsubsection{}
+\begin{lstlisting}
+function A = sars_mat1 (k, eps, del, lam, the, sig, gam, bet)
+  A = [(1-eps-lam)+bet*k, bet, 0, 0;
+        eps, 1-the-del, 0, 0;
+        lam, 0, 1-sig, 0;
+        0, the, sig, 1-gam-del
+        ];
+endfunction
+\end{lstlisting}
 
 \subsubsection{}
+\begin{lstlisting}
+A = sars_mat1(0.1, 2/15, 15/2100, 1/5, 1/3, 1/3, 1/21, 0.7);
+[v, LAM] = eig(A);
+e = eig_dom(A);
+for i = 1:4
+  if LAM(i,i) == e
+    eig_v = v(:,i);
+  endif
+endfor
+verhalten = eig_v/sum(eig_v)
+\end{lstlisting}
+Output:
+    e = 1.0060
+    
+    verhalten = 
+    \begin{pmatrix}
+        0.136688 \\
+        0.052597 \\
+        0.080556 \\
+        0.730159 \\
+    \end{pmatrix}
 
 \subsubsection{}
+\begin{lstlisting}
+A = sars_mat1(0.1, 2/15, 15/2100, 1/5, 1/3, 1/3, 1/21, 0.7);
+
+v0 = [477; 286; 191; 848];
+res = [];
+for i = 1:365
+  res(:,i) = A^i * v0;
+endfor
+
+hold on
+for i = 1:4
+  plot(1:365, res(i,:))
+endfor
+hold off
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{SARS1g.png}
+\label{fig:universe}
+\caption{SARS Krankheitsverlauf (\beta = 0.7)}
+\end{figure}
 
 \subsubsection{}
-Gute Hygene/Impfungen etc.
+\begin{lstlisting}
+A = sars_mat1(0.1, 2/15, 15/2100, 1/5, 1/3, 1/3, 1/21, 0.3);
 
+v0 = [477; 286; 191; 848];
+res = [];
+for i = 1:365
+  res(:,i) = A^i * v0;
+endfor
+
+hold on
+for i = 1:4
+  plot(1:365, res(i,:))
+endfor
+hold off
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{SARS1h.png}
+\label{fig:universe}
+\caption{SARS Krankheitsverlauf (\beta = 0.3)}
+\end{figure}
+
+Man kann mit guten Hygienen, Impfungen, etc. $\beta$ niedriger machen.
+Diese Methode hat einen starken Einfluss auf den Krankheitsverlauf.
+
+\subsubsection{}
+\begin{lstlisting}
+bet = 0.5;
+min = 0.3;
+max = 0.7;
+currentValue = 0;
+
+while true
+  bet = (min + max)*0.5;
+  A = sars_mat1(0.1, 2/15, 15/2100, 1/5, 1/3, 1/3, 1/21, bet);
+  
+  currentValue = eig_dom(A)(1);
+  
+  if abs(currentValue-1) <= 10^-12
+    if currentValue < 1
+      min = bet;
+      b = (min + max)*0.5;
+    endif
+    break;
+  elseif currentValue > 1
+    max = bet;
+  else
+    min = bet;
+  endif
+  
+endwhile
+bet
+\end{lstlisting}
+Output: bet = 0.6780464675219262
 %TODO add graph
 
 

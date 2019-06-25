@@ -727,11 +727,39 @@ $$\frac{u_k^{d_k} - u_k^{(d_k+1)}}{1-u_k^{d_k}}$$
     \end{pmatrix}
 \]
 
+\normalsize
 
+\subsection{SARS}
 
-\subsection{}
+\subsubsection{}
+Die Konstanten benennen wie viele Personen vom einem Infektionszustand zu einem anderen gelangen.
+$\lambda$ Bezeichnet zum Beispiel wie viele Exposed im nächsten Schritt nicht mehr Exposed, sondern Quaratantined sind.
 
+\subsubsection{}
+$$E(t+1) = E(t) + \beta(t)(kE+I) - \lambda E(t) - \epsilon E(t) $$
+$$I(t+1) = I(t) + \epsilon E(t) - \delta I(t) - \theta I(t)$$
+$$J(t+1) = J(t) + \sigma Q(t) + \theta I(t) - \delta J(t) - \gamma J(t)$$
+$$R(t+1) = R(t) + \gamma J(t)$$
 
+\subsubsection{}
+Keine Person wird jemals zu S zurückgehen und somit wird S(t) auf lange Sicht gesehen vernachlässigbar.
+
+\subsubsection{}
+\[
+    \begin{pmatrix}
+    E \\
+    I \\
+    Q \\
+    J \\
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+     1 + k * \beta (t) - \lambda - \epsilon && \beta (t) && 0 && 0\\
+     \epsilon &&  1 - \theta - \delta && 0 && 0\\
+     \lambda && 0 && 1 - \sigma && 0 \\
+     0 &&  \theta && \sigma && 1 - \delta - \gamma \\
+    \end{pmatrix}
+\]
 
 
 

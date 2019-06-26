@@ -30,9 +30,9 @@
 \maketitle
 
 
-\section{Markov Ketten: Wahrscheinlichkeit beim Tennis}
-\subsection{Tennis Match 1}
-\subsubsection{} Als Zusatzblatt
+\section{Tennis Match}
+\subsection{}
+\subsubsection{} Auf Zusatzblatt
 \subsubsection{} 
 \[
 M=
@@ -141,6 +141,14 @@ P^3 * u=
     0.00000 \\
     0.74400 \\
     0.06400 \\
+  \end{pmatrix}
+P^3 * v=
+  \begin{pmatrix}
+    0.00000 \\
+    0.28800 \\
+    0.19200 \\
+    0.36000 \\
+    0.16000 \\
     
   \end{pmatrix}
 \]
@@ -154,6 +162,15 @@ P^{30} * u=
     0.12307 \\
     
   \end{pmatrix}
+P^{30} * v=
+  \begin{pmatrix}
+    0.00002 \\
+    0.00000 \\
+    0.00000 \\
+    0.69230 \\
+    0.30769 \\
+    
+  \end{pmatrix}
 \]
 \[
 P^{100} * u=
@@ -165,6 +182,15 @@ P^{100} * u=
     0.12308 \\
     
   \end{pmatrix}
+P^{100} * u=
+  \begin{pmatrix}
+   0.00000 \\
+   0.00000 \\
+   0.00000 \\
+   0.69231 \\
+   0.30769 \\
+    
+  \end{pmatrix}
 \]
 Erklärung: \\
 Bei $P^3$ ist noch ein gewisser Teil der Spiele im Einstand, während bei $P^{30}$ und $P^{100}$ (fast) alle Spiele schon beendet und meistens zugunsten von Spieler 1 ausgegangen sind.
@@ -173,35 +199,21 @@ Bei $P^3$ ist noch ein gewisser Teil der Spiele im Einstand, während bei $P^{30
 
 Lösungsweg: \\
 \vspace{5mm}
-\footnotesize{
-\begin{lstlisting}
-Funktion "f": 
-function y = f (x) 
-  V = [ 
-   0.00000   0.00000  -0.67479  -0.00000   0.42602; 
-   0.00000   0.00000   0.58438  -0.73019   0.36894; 
-   0.00000   0.00000   0.38959   0.48679   0.24596; 
-   1.00000   0.00000  -0.20713   0.43811  -0.72064; 
-   0.00000   1.00000  -0.09206  -0.19472  -0.32028; 
-  ] 
-  goal = [1; 0; 0; 0; 0] 
-  y = zeros(5,1) 
-  y(1) = x(1) * V(1,1) + x(2) * V(1,2) + x(3) * V(1,3) + x(4) * V(1,4) + x(5) * V(1,5) - 1 
-  y(2) = x(1) * V(2,1) + x(2) * V(2,2) + x(3) * V(2,3) + x(4) * V(2,4) + x(5) * V(2,5) 
-  y(3) = x(1) * V(3,1) + x(2) * V(3,2) + x(3) * V(3,3) + x(4) * V(3,4) + x(5) * V(3,5) 
-  y(4) = x(1) * V(4,1) + x(2) * V(4,2) + x(3) * V(4,3) + x(4) * V(4,4) + x(5) * V(4,5) 
-  y(5) = x(1) * V(5,1) + x(2) * V(5,2) + x(3) * V(5,3) + x(4) * V(5,4) + x(5) * V(5,5) 
-endfunction
-\end{lstlisting}
-}
+
 \begin{lstlisting}
 Datei "tennis1": 
-P = [0, 0.4, 0.6, 0, 0; 
-    0.6, 0, 0, 0, 0; 
-    0.4, 0, 0, 0, 0; 
-    0, 0.6, 0, 1, 0; 
-    0, 0, 0.4, 0, 1] 
-[x, fval, info] = fsolve (@f, [1; 1; 1; 1; 1]) 
+P = [0, 0.4, 0.6, 0, 0;
+    0.6, 0, 0, 0, 0;
+    0.4, 0, 0, 0, 0;
+    0, 0.6, 0, 1, 0;
+    0, 0, 0.4, 0, 1];
+
+
+[V, LAMBDA] = eig(P);
+
+v0 = [1;0;0;0;0];
+
+x = V \ v0
 \end{lstlisting}
 \vspace{5mm}
 \normalsize
@@ -257,7 +269,7 @@ $P^{10000} * v$ = \[
 Chance $= 69.231 \%$
 
 
-\subsection{Tennis Match 2}
+\subsection{}
 \subsubsection{}
 \begin{lstlisting}
 function P = prob_win (p)
@@ -383,7 +395,7 @@ plot(o, k)
 \label{fig:universe}
 \end{figure}
 
-\subsection{Tennis Match 3}
+\subsection{}
 
 \subsubsection{}
 Chance auf Einstand:
@@ -438,7 +450,7 @@ endfor
 plot(0:0.01:1, w)
 \end{lstlisting}
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.2]{winplot.png}
 \caption{Winchance}
@@ -448,12 +460,12 @@ plot(0:0.01:1, w)
 
 
 
-\section{Populationsmodelle}
+\section{Einführung in die Populationsmodelle}
 \subsubsection{}
 Auf Zusatzblatt
 \subsubsection{}
 Bleibt konstant \\
-Erklärung: Es kommen immer 6 dazu, danach durch 2 und durch 3 -> wieder bei 1
+Erklärung: Es kommen immer 4 dazu, danach mal $\frac{1}{4}$ -> Determinante = 1 \\ -> Populationssumme bleibt gleich
 \subsubsection{}
 eig(A1) = 2, -1, -1 -> wird immer grösser, dominanter (=absolut gesehen grösster) > 1 \\
 eig(A2) = 0.75, 0.375, 0.375 -> wird immer kleiner, dominanter (=absolut gesehen grösster) < 1 \\
@@ -546,7 +558,7 @@ endfunction
 
 \subsubsection{}
 Am Beispiel A1: \\
-[V, LAM] = eig(A1)
+$$[V, LAM] = eig(A1)$$
 \[
 V =
   \begin{pmatrix}
@@ -567,7 +579,7 @@ LAM =
 Der Eigenwert \textbf{2} ist der dominate Eigenwert und wird langfristig gesehen der einzig wichtige Eigenvektor sein. Dessen dazugehöriger Eigenvektor zeigt deshalb auch die Aufteilung der Population langfristig gesehen.
 
 \subsubsection{}
-Die Eigenwerte von A4 = [1, -1] und A5 = [-0.5 + 0.86603i, -0.5 + 0.86603i, 1] haben alle den gleichen Betrag (=1). Es gibt keinen dominaten Eigenwert und man muss alle berücksichtigen.
+Die Eigenwerte von A4 = [1, -1] und A5 = [-0.5 + 0.86603i, -0.5 + 0.86603i, 1] haben alle den gleichen Betrag (=1). Es gibt keinen dominaten Eigenwert, man muss alle berücksichtigen und die Aufteilung zwischen den Altersgruppen wird viel komplexer.
 
 \subsubsection{}
 Sage man habe die Matrix M und deren Eigenwerte $\lambda_1, \lambda_2 ... \lambda_n$ \\
@@ -606,7 +618,8 @@ function dom = eig_dom (M)
 endfunction
 \end{lstlisting}
 
-\subsection{Schutz für die Unechte Karettschildkröte 1}
+\section{Schutz für die Unechte Karettschildkröte}
+\subsection{}
 \subsubsection{}
 Die Perioden haben eine unterschiedliche Dauer, also gehen nicht alle Überlebende einer Gruppe in die nächste Gruppe.
 
@@ -617,7 +630,7 @@ Der Wert bedeutet, dass nach einem Jahr 66.11\% aller grosser Jugenlichen immer 
 
 pop\_karettschildkroete.m:
 
-
+\footnotesize {
 \begin{lstlisting}
 L = [ 0       0         0         0         127       4         80;
       0.6747  0.7371    0         0         0         0         0;
@@ -642,6 +655,7 @@ for i = 1:7
 endfor
 hold off
 \end{lstlisting}
+}
 
 \begin{figure}[H]
 \centering
@@ -743,7 +757,9 @@ cur
 
 Output: 1.108695552170977
 
-\subsection{Schutz für die Unechte Karettschildkröte 2}
+\vspace{5mm}
+
+\subsection{}
 
 \subsubsection{}
 \[
@@ -812,7 +828,7 @@ Jahr 8
 $$\frac{u_2^7 * u_1}{u_1 + \sum_{k=1}^{6} u_2^k * u_1} 
 = \frac{u_2^7}{1 + \sum_{k=1}^{6} u_2^k}$$ \\
 $$= \frac{u_2^7}{1 + \frac{1 - u_2^7}{1 - u_2}-1} =
- \frac{u_2^7 - u_2^8}{1-u_2^7} = 0.040459$$
+ \frac{u_2^7 - u_2^8}{1-u_2^7} = 0.048593$$
 }
 
 \subsubsection{}
@@ -934,13 +950,13 @@ endwhile
 p
 eig_dom(L_estimate_TED(p, d, u, g))(1)
 \end{lstlisting}
-Output:
-    p = 0.03955436545402335
+Output: \\
+    p = 0.03955436545402335 \\
     ans = 1.000000000000753
 
 
-\vspace{1cm}
-\section{SARS}
+\vspace{5mm}
+\section{Schweres Akutes Respiratorisches System (SARS)}
 \subsection{}
 
 \subsubsection{}
@@ -989,7 +1005,7 @@ endfunction
 \begin{lstlisting}
 A = sars_mat1(0.1, 2/15, 15/2100, 1/5, 1/3, 1/3, 1/21, 0.7);
 [v, LAM] = eig(A);
-e = eig_dom(A);
+e = eig_dom(A)
 for i = 1:4
   if LAM(i,i) == e
     eig_v = v(:,i);
@@ -1073,8 +1089,8 @@ while true
   currentValue = eig_dom(A)(1);
   
   if abs(currentValue-1) <= 10^-12
-    if currentValue < 1
-      min = bet;
+    if currentValue > 1
+      max = bet;
       b = (min + max)*0.5;
     endif
     break;
@@ -1090,7 +1106,12 @@ bet
 Output: bet = 0.6780464675219262
 %TODO add graph
 
+\vspace{5mm}
 
+\section{Danksagung}
+Wir danken Professor Overflow, Stack bei der effizienten Mithilfe bei Problemen. \\
+Wir danken Herr Truong für das Löschen Matteos Account (und auch für die anderen Sachen). \\
+Wir danken \textbf{nicht} Matteo und Roy. \\
 
 
 \end{document}
